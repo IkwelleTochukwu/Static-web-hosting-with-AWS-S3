@@ -2,6 +2,7 @@
 sub-domain bucket and logging bucket.*/
 
 ######## root domain bucket creation ##########
+
 resource "aws_s3_bucket" "root_domain_bucket" {
   bucket = var.root_bucket_name
   tags   = var.resource_tags
@@ -22,10 +23,9 @@ resource "aws_s3_bucket_versioning" "versioning" {
 
 resource "aws_s3_object" "bucket_objects" {
   bucket   = aws_s3_bucket.root_domain_bucket.id
-  for_each = fileset("./staticwebsite/", "*")
-  key      = each.value
-  source   = "./staticwebsite/${each.value}"
-  etag     = filemd5("./staticwebsite/${each.value}")
+  key      = "index.html"
+  source   = "./index.html"
+  etag     = filemd5("./index.html")
 }
 
 resource "aws_s3_bucket_policy" "allowGetObjectAccess" {
@@ -42,6 +42,7 @@ resource "aws_s3_bucket_website_configuration" "static_web_hosting" {
 
 
 ####### sub-domain bucket creation #########
+
 resource "aws_s3_bucket" "sub_domain_bucket" {
   bucket = var.sub_domain_bucket_name
   tags   = var.resource_tags
@@ -50,13 +51,20 @@ resource "aws_s3_bucket" "sub_domain_bucket" {
 resource "aws_s3_bucket_website_configuration" "redirecting_bucket_endpoint" {
   bucket = var.sub_domain_bucket_name
   redirect_all_requests_to {
-    host_name = "demoapplication.tk"
+    host_name = var.root_bucket_name
   }
 }
 
 ######## logs bucket creation ############
+
 resource "aws_s3_bucket" "logs_s3_bucket" {
   bucket = var.log_bucket_name
   tags   = var.resource_tags
+}
+
+resource "aws_s3_object" "log_folder" {
+  bucket       = aws_s3_bucket.logs_s3_bucket.id
+  key          = "logs/"
+  content_type = "application/x-directory"
 }
 

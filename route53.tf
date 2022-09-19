@@ -1,4 +1,4 @@
-data "aws_route53_zone" "s3_hostedzone" {
+/*data "aws_route53_zone" "s3_hostedzone" {
   name         = var.s3_hostedzone
   private_zone = false
 }
@@ -25,4 +25,4 @@ resource "aws_route53_record" "subdomain" {
     zone_id                = aws_s3_bucket.sub_domain_bucket.hosted_zone_id
     evaluate_target_health = false
   }
-}
+}*/
