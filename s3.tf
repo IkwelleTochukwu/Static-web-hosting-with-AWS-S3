@@ -52,6 +52,7 @@ resource "aws_s3_bucket_website_configuration" "redirecting_bucket_endpoint" {
   bucket = var.sub_domain_bucket_name
   redirect_all_requests_to {
     host_name = var.root_bucket_name
+    protocol = "http"
   }
 }
 
