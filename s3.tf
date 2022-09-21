@@ -14,18 +14,11 @@ resource "aws_s3_bucket_logging" "root_domain_logs" {
   target_prefix = "log/"
 }
 
-resource "aws_s3_bucket_versioning" "versioning" {
-  bucket = aws_s3_bucket.root_domain_bucket.id
-  versioning_configuration {
-    status = "Enabled"
-  }
-}
-
 resource "aws_s3_object" "bucket_objects" {
-  bucket   = aws_s3_bucket.root_domain_bucket.id
-  key      = "index.html"
-  source   = "./index.html"
-  etag     = filemd5("./index.html")
+  bucket = aws_s3_bucket.root_domain_bucket.id
+  key    = "index.html"
+  source = "./index.html"
+  etag   = filemd5("./index.html")
 }
 
 resource "aws_s3_bucket_policy" "allowGetObjectAccess" {
@@ -52,7 +45,7 @@ resource "aws_s3_bucket_website_configuration" "redirecting_bucket_endpoint" {
   bucket = var.sub_domain_bucket_name
   redirect_all_requests_to {
     host_name = var.root_bucket_name
-    protocol = "http"
+    protocol  = "http"
   }
 }
 

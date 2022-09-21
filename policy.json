@@ -9,7 +9,7 @@
                 "s3:GetObject"
             ],
             "Resource": [
-                "arn:aws:s3:::demoapplication.tk/*"
+                "arn:aws:s3:::${var.root_bucket_name}/*"
             ]
         }
     ]
